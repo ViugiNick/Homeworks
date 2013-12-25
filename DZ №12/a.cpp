@@ -1,163 +1,102 @@
-#include <cstdio>
-#include <cstdlib>
-#include <string.h>
 #include <iostream>
+#include <string.h>
+#include <cstdio>
+#include "parseDouble.h"
 
 using namespace std;
 
-const int maxSize = 1000;
+bool isGoodExpression(int &left, char *& inputString, const int right);
+bool isGoodPre(int &left, char *& inputString, const int right); 
+bool isGoodSum(int &left, char *& inputString, const int right);
+bool isGoodMul(int &left, char *& inputString, const int right);
+bool isGoodBracket(int &left, char *& inputString, const int right);
+bool isGoodNumber(int &left, char *& inputString, const int right);
 
-bool isGoodSum(char *inputString, int &currentSymbol, int right);
-bool isGoodPre(char *inputString, int &currentSymbol, int right);
-bool isGoodMult(char *inputString, int &currentSymbol, int right);
-bool isGoodBracket(char *inputString, int &currentSymbol, int right);
-bool isGoodExpression(char *inputString, int &currentSymbol, int right);
-bool isGoodDouble(char *inputString, int &left, int right);
+const int maxSize = 100;
 
-int typeOf(char c)
+bool isGoodExpression(int &left, char *& inputString, const int right)
 {
-	if(c == '+' || c == '-')
-		return 1;
-	
-	if(c >= '0' && c <= '9')
-		return 2;
-	
-	if(c == 'E')
-		return 3;
-		
-	if(c == '.')
-		return 5;
-
-	return 4;
-}
-
-bool isGoodDouble(char *inputString, int &left, int right)
-{
-	//cerr << "LOL" << endl;
-	int g[10][10];
-	int vertex = 1;
-	
-	g = {
-			{0, 0, 0, 0, 0, 0},
-			{0, 2, 3, 8, 8, 8},
-			{0, 8, 3, 8, 8, 8},
-			{0, 8, 3, 7, 8, 4},
-			{0, 8, 5, 8, 8, 8},
-			{0, 8, 5, 6, 8, 8},
-			{0, 7, 9, 8, 8, 8},
-			{0, 8, 7, 8, 8, 8},
-			{0, 8, 8, 8, 8, 8},
-			{0, 8, 9, 8, 8, 8}
-		};
-	for (left; left < right; left++)
-	{
-		if (((vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7) && typeOf(inputString[left - 1]) == 2) && (g[vertex][typeOf(inputString[left])] == 8))
-		{
-			//cerr << inputString[left] << endl;
-			return true;
-		}
-		vertex = g[vertex][typeOf(inputString[left])];
-	}
-	
-	if ((vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7) && typeOf(inputString[left - 1]) == 2)
-	{
-		//cerr << inputString[left] << endl;
+	if (left == right)
 		return true;
-	}
-	else
-		return false;
-	
+	return (isGoodPre(left, inputString, right) * isGoodSum(left, inputString, right));
 }
 
-bool isGoodSum(char *inputString, int &left, int right) 
+bool isGoodPre(int &left, char *& inputString, const int right)
 {
-	if(left == right)
+	if (left == right)
 		return true;
-
-	if(inputString[left] == '+' || inputString[left] == '-') 
-	{
-		left++;
-		return(isGoodPre(inputString, left, right) && isGoodSum(inputString, left, right));
-	}
-	return true;
+	
+	return (isGoodBracket(left, inputString, right) * isGoodMul(left, inputString, right));
 }
 
-bool isGoodPre(char *inputString, int &left, int right) 
+bool isGoodSum(int &left, char *& inputString, const int right)
 {
 	if (left == right)
 		return true;
 
-	return isGoodBracket(inputString, left, right) && isGoodMult(inputString, left, right);
+	int curIndex = left;
+	
+	if ((inputString[left] == '+') || (inputString[left] == '-'))
+	{
+		left++;
+		return (isGoodPre(left, inputString, right) * isGoodSum(left, inputString, right));
+	}
+	left = curIndex;
+	return true;
 }
 
-bool isGoodMult(char *inputString, int &left, int right) 
+bool isGoodMul(int &left, char *& inputString, const int right)
 {
 	if (left == right)
 		return true;
 
-	if (inputString[left] == '*' || inputString[left] == '/') 
+	int curIndex = left;
+	if ((inputString[left] == '*') || (inputString[left] == '/'))
 	{
 		left++;
-		return isGoodBracket(inputString, left, right) && isGoodMult(inputString, left, right);
+		return (isGoodBracket(left, inputString, right) * isGoodMul(left, inputString, right));
 	}
-
+	left = curIndex;
 	return true;
 }
 
-bool isGoodBracket(char *inputString, int &left, int right) 
+bool isGoodBracket(int &left, char *& inputString, const int right)
 {
-	if(left == right)
-		return true;
-
-	if(inputString[left] == '(') 
+	int curIndex = left;
+	if ((inputString[left] == '(') && (isGoodExpression(++left, inputString, right) && inputString[left] == ')'))
 	{
 		left++;
-		
-		if(isGoodExpression(inputString, left, right) && inputString[left] == ')')
-		{
-			left++;
-			return true;
-		}
-
-		return false;
-	}
-
-	int oldLeft = left;
-
-	if(isGoodDouble(inputString, left, right))
 		return true;
+	}
+	left = curIndex;
 
-	left = oldLeft;
+	if (isGoodNumber(left, inputString, right))
+		return true;
+	left = curIndex;
 	return false;
 }
 
-bool isGoodExpression(char *inputString, int &left, int right) 
+bool isGoodNumber(int &left, char *& inputString, const int right)
 {
-	if (left == right)
-		return true;
-
-	cerr << isGoodPre(inputString, left, right) << " " << isGoodSum(inputString, left, right) << endl;
-		
-	return (isGoodPre(inputString, left, right) && isGoodSum(inputString, left, right));
+	return (isGoodDouble(inputString, right, left));
 }
 
-int main() 
+int main()
 {
 	freopen("text.in", "r", stdin);
-	char inputString[maxSize];
-
-	printf("Enter your expression:\n");
-	cin >> inputString;
-	cout << inputString <<endl;
 	
-	int right = strlen(inputString);
+	char * inputString = new char[maxSize];
+	cin >> inputString;
 
 	int left = 0;
-	
-	if (isGoodExpression(inputString, left, right) && (left == right))
+	const int sizeOfString = strlen(inputString);
+
+	if((isGoodExpression(left, inputString, sizeOfString)) && (left == sizeOfString))
 		cout << "Good string";
 	else
-		cout << "Bad string";
-		
+		cout << "Bad sring";
+	
+	delete[] inputString;
+	
 	return 0;
 }
