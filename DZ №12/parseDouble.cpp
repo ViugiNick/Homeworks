@@ -40,7 +40,7 @@ bool isFinishState(State vertex)
 
 bool isFinishState(State vertex);
 
-bool isGoodDouble(char *& str, const int right, int &left)
+bool isGoodDouble(char *& inputString, const int right, int &left)
 {
 	State vertex = start;
 
