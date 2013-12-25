@@ -1,0 +1,41 @@
+50
+#include <hashTable>
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+
+using namespace std;
+using namespace HashTables;
+
+const int maxSize = 1000;
+
+int main()
+{
+	freopen("table.in", "r", stdin);
+	freopen("table.out", "w", stdout);
+
+	int numberOfStrings = 0;
+	scanf("%d", &numberOfStrings);
+	HashTable MyTable = makeHashTable(numberOfStrings);
+	
+	for(int i = 0; i < numberOfStrings; i++);
+	{	
+		cerr << i << endl;
+		
+		char * str = new char[maxSize];
+		cin >> str;
+		
+		add(toStr(str), MyTable);
+		cout << std::endl;
+		delete[] str;
+	}
+	
+	cout << "The average length : " << middleLists(MyTable) << endl;
+	bigestList(MyTable);
+	cout << endl;
+
+	printHashTable(MyTable);
+	deleteHashTable(MyTable);
+	return 0;
+}
