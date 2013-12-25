@@ -58,7 +58,7 @@ int main()
 		cerr << vertex << endl;
 	}
 	
-	if (vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7)
+	if (vertex == 3 || vertex == 5 || vertex == 9)
 		cout << "Good string";
 	else
 		cout << "Bad string";

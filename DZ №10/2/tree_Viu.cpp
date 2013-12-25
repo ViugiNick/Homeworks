@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const int MAXN = 100;
+const int maxN = 100;
 
 namespace Trees
 {
@@ -100,9 +100,9 @@ namespace Trees
 
 	char * toStr(Tree * tree)
 	{
-		char *str = new char[MAXN];
+		char *str = new char[maxN];
 		
-		for(int i = 0; i < MAXN; i++)
+		for(int i = 0; i < maxN; i++)
 			str[i] = 0;
 		
 		int index = 0;
@@ -133,7 +133,7 @@ namespace Trees
 
 	void print(Tree * tree, char c)
 	{
-		char *str = new char[MAXN];
+		char *str = new char[maxN];
 		
 		int index = 0;
 		print(tree->root, str, index, c);

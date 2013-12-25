@@ -19,15 +19,16 @@ int main()
 	
 	
 	int sizeOfFirtsPolinom = 0;
-	cout << "Input size of first polimon" << endl;
+	cout << "Input size of first polinom" << endl;
 	
 	cin >> sizeOfFirtsPolinom;
 	
-	cout << "Input your polimon" << endl;
+	cout << "Input your polinom" << endl;
 	
 	for (int i = 0; i < sizeOfFirtsPolinom; i++)
 	{
-		int a, b;
+		int a = 0;
+		int b = 0;
 		
 		cin >> a >> b;
 		ListElement *temp = new ListElement;
@@ -39,15 +40,16 @@ int main()
 	printList(list1);
 	
 	int sizeOfSecondPolinom = 0;
-	cout << "Input size of second polimon" << endl;
+	cout << "Input size of second polinom" << endl;
 	
 	cin >> sizeOfSecondPolinom;
 	
-	cout << "Input your polimon" << endl;
+	cout << "Input your polinom" << endl;
 	
 	for (int i = 0; i < sizeOfSecondPolinom; i++)
 	{
-		int a, b;
+		int a = 0;
+		int b = 0;
 		
 		cin >> a >> b;
 		ListElement *temp = new ListElement;

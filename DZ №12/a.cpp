@@ -9,7 +9,7 @@ const int maxSize = 1000;
 
 bool isGoodSum(char *inputString, int &currentSymbol, int right);
 bool isGoodPre(char *inputString, int &currentSymbol, int right);
-bool isGoodMultiplication(char *inputString, int &currentSymbol, int right);
+bool isGoodMult(char *inputString, int &currentSymbol, int right);
 bool isGoodBracket(char *inputString, int &currentSymbol, int right);
 bool isGoodExpression(char *inputString, int &currentSymbol, int right);
 bool isGoodDouble(char *inputString, int &left, int right);
@@ -33,8 +33,6 @@ int typeOf(char c)
 
 bool isGoodDouble(char *inputString, int &left, int right)
 {
-	return true;
-	
 	int g[10][10];
 	int vertex = 1;
 	
@@ -50,13 +48,18 @@ bool isGoodDouble(char *inputString, int &left, int right)
 	
 	for (left; left < right; left++)
 	{
+		if ((vertex == 3 || vertex == 5 || vertex == 9) && (g[vertex][typeOf(str[left])] == 8))
+		{
+			left--;
+			return true;
+		}
 		vertex = g[vertex][typeOf(str[left])];
 	}
-	
-	if (vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7)
+	if (vertex == 3 || vertex == 5 || vertex == 9)
+	{
 		return true;
-	else
-		return false;
+	}
+	
 }
 
 bool isGoodSum(char *inputString, int &left, int right) 
@@ -77,10 +80,10 @@ bool isGoodPre(char *inputString, int &left, int right)
 	if (left == right)
 		return true;
 
-	return isGoodBracket(inputString, left, right) && isGoodMultiplication(inputString, left, right);
+	return isGoodBracket(inputString, left, right) && isGoodMult(inputString, left, right);
 }
 
-bool isGoodMultiplication(char *inputString, int &left, int right) 
+bool isGoodMult(char *inputString, int &left, int right) 
 {
 	if (left == right)
 		return true;
@@ -88,8 +91,8 @@ bool isGoodMultiplication(char *inputString, int &left, int right)
 	if (inputString[left] == '*' || inputString[left] == '/') 
 	{
 		left++;
-		return isGoodBracket(inputString, left, right) && isGoodMultiplication(inputString, left, right);
-		}
+		return isGoodBracket(inputString, left, right) && isGoodMult(inputString, left, right);
+	}
 
 	return true;
 }
@@ -126,10 +129,10 @@ bool isGoodExpression(char *inputString, int &left, int right)
 	if (left == right)
 		return true;
 
+	cerr << isGoodPre(inputString, left, right) << " " << isGoodSum(inputString, left, right) << endl;
+		
 	return (isGoodPre(inputString, left, right) && isGoodSum(inputString, left, right));
 }
-
-
 
 int main() 
 {
