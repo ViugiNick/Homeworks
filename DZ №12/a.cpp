@@ -33,32 +33,39 @@ int typeOf(char c)
 
 bool isGoodDouble(char *inputString, int &left, int right)
 {
+	//cerr << "LOL" << endl;
 	int g[10][10];
 	int vertex = 1;
 	
-	for (int i = 1; i <= 9; i++)
-	{
-		for(int j = 1; j <= 5; j++)
-		{
-			cin >> g[i][j];
-		}
-	}
-	char str[maxSize];
-	cin >> str;
-	
+	g = {
+			{0, 0, 0, 0, 0, 0},
+			{0, 2, 3, 8, 8, 8},
+			{0, 8, 3, 8, 8, 8},
+			{0, 8, 3, 7, 8, 4},
+			{0, 8, 5, 8, 8, 8},
+			{0, 8, 5, 6, 8, 8},
+			{0, 7, 9, 8, 8, 8},
+			{0, 8, 7, 8, 8, 8},
+			{0, 8, 8, 8, 8, 8},
+			{0, 8, 9, 8, 8, 8}
+		};
 	for (left; left < right; left++)
 	{
-		if ((vertex == 3 || vertex == 5 || vertex == 9) && (g[vertex][typeOf(str[left])] == 8))
+		if (((vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7) && typeOf(inputString[left - 1]) == 2) && (g[vertex][typeOf(inputString[left])] == 8))
 		{
-			left--;
+			//cerr << inputString[left] << endl;
 			return true;
 		}
-		vertex = g[vertex][typeOf(str[left])];
+		vertex = g[vertex][typeOf(inputString[left])];
 	}
-	if (vertex == 3 || vertex == 5 || vertex == 9)
+	
+	if ((vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7) && typeOf(inputString[left - 1]) == 2)
 	{
+		//cerr << inputString[left] << endl;
 		return true;
 	}
+	else
+		return false;
 	
 }
 

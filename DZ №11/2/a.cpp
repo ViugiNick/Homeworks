@@ -42,15 +42,22 @@ int main()
 	int g[10][10];
 	int vertex = 1;
 	
-	for (int i = 1; i <= 9; i++)
-	{
-		for(int j = 1; j <= 5; j++)
-		{
-			cin >> g[i][j];
-		}
-	}
+	g = {
+			{0, 0, 0, 0, 0, 0},
+			{0, 2, 3, 8, 8, 8},
+			{0, 8, 3, 8, 8, 8},
+			{0, 8, 3, 7, 8, 4},
+			{0, 8, 5, 8, 8, 8},
+			{0, 8, 5, 6, 8, 8},
+			{0, 7, 9, 8, 8, 8},
+			{0, 8, 7, 8, 8, 8},
+			{0, 8, 8, 8, 8, 8},
+			{0, 8, 9, 8, 8, 8}
+		};
+		
 	char str[maxSize];
 	cin >> str;
+	cerr << str << endl;
 	
 	for (int i = 0; i < strlen(str); i++)
 	{
@@ -58,7 +65,7 @@ int main()
 		cerr << vertex << endl;
 	}
 	
-	if (vertex == 3 || vertex == 5 || vertex == 9)
+	if (vertex == 3 || vertex == 5 || vertex == 9 || vertex == 7 && typeOf(str[strlen(str) - 1]) == 2)
 		cout << "Good string";
 	else
 		cout << "Bad string";
